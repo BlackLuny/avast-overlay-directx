@@ -11,14 +11,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR CmdLine, 
 
 	Function.LoadConsole();
 
-	//if (!Process->Attach(reinterpret_cast<void*>(atoi(CmdLine))))
-	//	Function.ShowMessage("Cannot receive handle correctly.", "Error", MB_ICONERROR | MB_OK);
-
 	if (!Function.IsAeroEnabled())
 		Function.ShowMessage("To use this cheat you need to have Aero enabled.", "Error", MB_ICONERROR | MB_OK);
 	
-	if (!Engine->Attach("Unbenannt - Editor"))
+	if (!Engine->Attach("Untitled - Notepad"))
 		Function.ShowMessage("Error while attaching to the target window!", "Error", MB_ICONERROR | MB_OK);
+
+	if (!Engine->OpenTarget(Engine->Target, PROCESS_ALL_ACCESS))
+		Function.ShowMessage("Error while open up the process!", "Error", MB_ICONASTERISK | MB_OK);
 
 	Function.LoadMemoryFont(IDR_FONT0);
 	Function.LoadMemoryFont(IDR_FONT1);
@@ -57,7 +57,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR CmdLine, 
 	{
 		TranslateMessage(&Main->Message);
 		DispatchMessage(&Main->Message);	
-		Sleep(2);
 	}
 
 	return 0;
@@ -73,10 +72,10 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 			DirectX->Render(Engine->IsWindowActive());
 		break;
 	case WM_SIZE:
-		DirectX->Reset(Engine->Size[0], Engine->Size[1]);
+			DirectX->Reset(Engine->Size[0], Engine->Size[1]);
 		break;
 	case WM_DESTROY:
-		PostQuitMessage(1);
+			PostQuitMessage(1);
 		break;
 	default:
 		return DefWindowProc(hWnd, Message, wParam, lParam);
